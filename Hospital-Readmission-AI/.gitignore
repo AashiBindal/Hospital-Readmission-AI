@@ -1,0 +1,67 @@
+# ===== Environment & secrets =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+application.properties
+application-*.properties
+!application.properties.example
+!application-nodb.properties
+
+# ===== Node / Frontend =====
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===== Java / Maven =====
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+hs_err_pid*
+
+# ===== Python =====
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# ===== ML artifacts (large binaries) =====
+ml-service/model/*.joblib
+ml-service/model/*.pkl
+!ml-service/model/.gitkeep
+
+# ===== Datasets (never commit private or large raw data) =====
+dataset/raw/*
+!dataset/raw/.gitkeep
+dataset/processed/*
+!dataset/processed/.gitkeep
+dataset/private/
+*.parquet
+*.xlsx
+*.zip
+
+# ===== Logs & temp =====
+logs/
+*.log
+tmp/
+temp/
+*.tmp
+*.swp
+*.bak
+
+# ===== IDE / OS =====
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.iml
+.DS_Store
+Thumbs.db

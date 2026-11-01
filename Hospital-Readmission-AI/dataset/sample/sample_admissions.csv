@@ -1,0 +1,6 @@
+patient_id,gender,age,admission_date,discharge_date,admission_type,department,primary_diagnosis_code,num_diagnoses,num_medications,num_prior_admissions,readmitted_30d
+SYN-0001,Female,67,2026-01-03,2026-01-09,Emergency,Cardiology,I50.9,7,14,2,1
+SYN-0002,Male,54,2026-01-10,2026-01-12,Elective,Orthopedics,M17.11,3,5,0,0
+SYN-0003,Female,81,2026-01-15,2026-01-25,Emergency,Pulmonology,J44.1,9,18,4,0
+SYN-0004,M,,2026-01-20,2026-01-18,Emergency,Cardiology,I21.4,5,9,1,
+SYN-0004,M,,2026-01-20,2026-01-18,Emergency,Cardiology,I21.4,5,9,1,
