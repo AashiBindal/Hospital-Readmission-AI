@@ -1,0 +1,84 @@
+{
+  "model_name": "RandomForest",
+  "trained_at": "2026-11-01T22:10:18",
+  "data_file": "diabetic_data.csv",
+  "patients_used": 69990,
+  "readmission_rate": 0.0898,
+  "model_comparison_roc_auc": {
+    "LogisticRegression": 0.6484,
+    "RandomForest": 0.6553
+  },
+  "metrics": {
+    "roc_auc": 0.6553,
+    "precision_at_medium_threshold": 0.1341,
+    "recall_at_medium_threshold": 0.6006,
+    "f1_at_medium_threshold": 0.2192,
+    "share_of_patients_flagged": 0.4023
+  },
+  "thresholds": {
+    "medium": 0.0906,
+    "high": 0.1175
+  },
+  "top_factors": [
+    {
+      "feature": "num_lab_procedures",
+      "importance": 0.1061
+    },
+    {
+      "feature": "num_medications",
+      "importance": 0.0858
+    },
+    {
+      "feature": "time_in_hospital",
+      "importance": 0.0715
+    },
+    {
+      "feature": "number_inpatient",
+      "importance": 0.0594
+    },
+    {
+      "feature": "discharge_disposition_id_1",
+      "importance": 0.0542
+    },
+    {
+      "feature": "age_num",
+      "importance": 0.053
+    },
+    {
+      "feature": "discharge_disposition_id_22",
+      "importance": 0.05
+    },
+    {
+      "feature": "number_diagnoses",
+      "importance": 0.048
+    },
+    {
+      "feature": "num_procedures",
+      "importance": 0.0418
+    },
+    {
+      "feature": "total_prior_visits",
+      "importance": 0.0412
+    },
+    {
+      "feature": "discharge_disposition_id_3",
+      "importance": 0.0213
+    },
+    {
+      "feature": "diag_1_group_Circulatory",
+      "importance": 0.0177
+    },
+    {
+      "feature": "gender_Female",
+      "importance": 0.0165
+    },
+    {
+      "feature": "gender_Male",
+      "importance": 0.0163
+    },
+    {
+      "feature": "discharge_disposition_id_5",
+      "importance": 0.0159
+    }
+  ]
+}

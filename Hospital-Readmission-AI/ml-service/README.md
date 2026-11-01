@@ -1,50 +1,71 @@
-# ML Service — FastAPI + scikit-learn
+# Hospital Readmission Risk - ML Service (Member 3)
 
-**Owner:** Member 3 · **Branch:** `ml-service` · **Port:** 8000
+Predicts the probability that a patient is readmitted within 30 days, using only
+information available at or before discharge. Decision-support only, not a diagnosis.
 
-## Setup
-```bash
-cd ml-service
-python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env
-uvicorn app.main:app --reload --port 8000
+## Files
+
+| File | What it does |
+|---|---|
+| `train_model.py` | Cleans data, trains Logistic Regression + Random Forest, picks the best, saves `model.pkl` and `model_info.json` |
+| `predict.py` | Loads `model.pkl`; `predict_risk(patient_dict)` returns probability + category |
+| `main.py` | FastAPI app: `/predict`, `/predict/batch`, `/model-info`, `/health` |
+| `features.py` | Shared feature preparation (used by both training and prediction) |
+| `make_sample_data.py` | Makes FAKE data for testing only. Never use for results. |
+
+## Run it (3 steps)
+
+1. Put the real dataset at `data/diabetic_data.csv`
+   (UCI "Diabetes 130-US Hospitals for years 1999-2008").
+2. Install and train:
+   ```bash
+   pip install -r requirements.txt
+   python train_model.py
+   ```
+   This creates `model.pkl` and `model_info.json` (your real metrics).
+3. Start the API:
+   ```bash
+   uvicorn main:app --reload --port 8000
+   ```
+   Test in the browser at http://127.0.0.1:8000/docs
+
+## API contract (share with the Spring Boot member)
+
+`POST http://localhost:8000/predict`
+
+Required: `age`, `time_in_hospital`, `number_inpatient`. Everything else is optional.
+
+```json
+{
+  "age": "[70-80)", "gender": "Female", "race": "Caucasian",
+  "admission_type_id": 1, "discharge_disposition_id": 1, "admission_source_id": 7,
+  "time_in_hospital": 8, "num_lab_procedures": 55, "num_procedures": 2,
+  "num_medications": 22, "number_outpatient": 1, "number_emergency": 2,
+  "number_inpatient": 3, "number_diagnoses": 9, "diag_1": "428",
+  "A1Cresult": ">8", "max_glu_serum": "None", "insulin": "Up",
+  "change": "Ch", "diabetesMed": "Yes"
+}
 ```
-- Health: http://localhost:8000/ml/health
-- Swagger UI: http://localhost:8000/docs
 
-### Tests
-```bash
-pytest
+Response:
+
+```json
+{ "probability": 0.41, "risk_percent": 40.8, "category": "High", "needs_follow_up": true }
 ```
 
-## Structure
-```
-app/
-├── main.py              FastAPI app, CORS, router registration
-├── config.py            Settings from env (.env)
-├── routes/
-│   ├── health.py        GET  /ml/health
-│   └── prediction.py    POST /ml/predict  (returns 501 until a model exists)
-├── schemas/             Pydantic request/response models
-├── services/
-│   ├── preprocessing.py feature engineering (placeholder)
-│   ├── training.py      model training (placeholder)
-│   ├── evaluation.py    metrics (placeholder)
-│   ├── prediction_service.py  inference (placeholder)
-│   └── model_loader.py  lazy joblib loading
-└── utils/logger.py
-model/                   trained .joblib files (git-ignored)
-scripts/train.py         training CLI
-tests/test_health.py
-```
+`POST /predict/batch` takes `{ "patients": [ ... ] }` and returns a list in the same order.
+`GET /model-info` returns metrics, thresholds and top risk factors for the dashboard.
 
-## Contract
-See `docs/api_documentation.md` → *ML Service*. The `PredictionRequest` fields are provisional and will change after dataset inspection.
+## Risk categories
 
-## TODO (Member 3)
-- Choose features after EDA, implement `preprocessing.build_features`
-- Baseline model (e.g. Logistic Regression → Random Forest / Gradient Boosting)
-- Evaluation report (ROC-AUC, recall on positive class, calibration)
-- Implement `/ml/predict` and optionally `/ml/predict/batch`
+- **Medium**: probability is above the cut-off that catches about 60% of real readmissions
+- **High**: top 20% riskiest patients
+- **Low**: everything else
+
+The exact cut-offs are saved in `model_info.json` after training.
+
+## Notes
+
+- Patients who died or went to hospice are removed (they cannot be readmitted).
+- Only the first visit per patient is kept, so the same person is never in both train and test.
+- Real-data ROC-AUC for this dataset is usually around 0.63-0.68. That is normal for readmission prediction.
