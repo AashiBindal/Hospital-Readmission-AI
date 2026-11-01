@@ -6,6 +6,15 @@
 USE HospitalReadmissionDB;
 GO
 
+/* Safety guard: these inserts assume an EMPTY database (PatientId 1-3,
+   AdmissionId 1-3). Never mix synthetic rows with the real dataset. */
+IF EXISTS (SELECT 1 FROM dbo.Patients) OR EXISTS (SELECT 1 FROM dbo.Admissions)
+BEGIN
+    RAISERROR(N'sample_data.sql skipped: the database already contains data.', 16, 1);
+    SET NOEXEC ON;   -- skip the remaining batches of this script
+END
+GO
+
 INSERT INTO dbo.Users (Username, Email, PasswordHash, FullName, Role) VALUES
  (N'admin',   N'admin@example.com',   N'$2a$10$PLACEHOLDER_HASH_REPLACE_ME', N'Demo Admin',   N'ADMIN'),
  (N'dr.demo', N'doctor@example.com',  N'$2a$10$PLACEHOLDER_HASH_REPLACE_ME', N'Demo Doctor',  N'DOCTOR');
@@ -37,4 +46,7 @@ INSERT INTO dbo.DataQualityLogs (UploadId, RuleName, ColumnName, Severity, Affec
 
 INSERT INTO dbo.Notifications (UserId, PatientId, Type, Message) VALUES
  (2, 1, N'HIGH_RISK', N'Patient SYN-0001 flagged as HIGH readmission risk.');
+GO
+
+SET NOEXEC OFF;
 GO
