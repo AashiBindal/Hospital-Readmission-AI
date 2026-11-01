@@ -43,5 +43,5 @@ Thumbs.db
 # ========================================
 # ENVIRONMENT & SECRETS (Ignored)
 # ========================================
-src/main/resources/application-nodb.properties
+src/main/resources/application.properties
 .env
