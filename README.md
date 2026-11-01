@@ -4,9 +4,8 @@
 
 > An AI-powered hospital readmission risk prediction platform with automated ETL, data quality monitoring, machine learning and healthcare analytics.
 
-![status](https://img.shields.io/badge/status-scaffold-orange) ![license](https://img.shields.io/badge/license-MIT-blue)
+ ![license](https://img.shields.io/badge/license-MIT-blue)
 
-> ⚠️ **Project status:** this repository currently contains the **foundation scaffold only** — folder structure, configuration, health checks and documentation. Business logic, model training and full UI are being built by the team on separate branches.
 
 ---
 
