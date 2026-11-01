@@ -32,7 +32,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
     @Override
     @Transactional
     public String requestOtp(ForgotPasswordRequestDto dto) {
-        Optional<User> userOpt = userRepository.findByUsername(dto.getUsername());
+        Optional<User> userOpt = userRepository.findByEmail(dto.getUsername());
 
         // Verify both username and email match the same account (prevent enumeration securely)
         if (userOpt.isEmpty() || !userOpt.get().getEmail().equalsIgnoreCase(dto.getEmail())) {
