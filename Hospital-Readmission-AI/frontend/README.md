@@ -1,61 +1,29 @@
-# Frontend — React + Vite + TypeScript
+# MediSight frontend (React 19 + Vite 8 + Tailwind 4)
 
-**Owner:** Member 1 · **Branch:** `frontend` · **Port:** 5173
+Talks to the Spring Boot backend in `../backend` through `src/api/axiosClient.js`.
 
-## Stack
-React 18, Vite 6, TypeScript, Tailwind CSS v4 (via `@tailwindcss/vite`), React Router v6, Axios, Recharts, Lucide React.
-
-## Setup
+## Run
 ```bash
-cd frontend
-cp .env.example .env        # VITE_API_BASE_URL=http://localhost:8080/api
 npm install
-npm run dev                 # http://localhost:5173
-npm run build               # type-check + production build
+npm run dev          # http://localhost:3000
+npm run build        # production build in dist/
+npm run preview      # serve dist/ locally
 ```
+Optional: copy `.env.example` to `.env` to change `VITE_API_BASE_URL` (default `http://localhost:8080/api`).
+The backend must allow this origin (`FRONTEND_URL`, default `http://localhost:3000`).
 
 ## Structure
-```
-src/
-├── assets/            static images, logos
-├── components/
-│   ├── common/        reusable UI (PageHeader, Placeholder, ...)
-│   ├── layout/        MainLayout, Sidebar, Header
-│   ├── dashboard/     KPI cards, charts
-│   ├── patients/      tables, detail panels
-│   ├── uploads/       upload widgets
-│   ├── predictions/   risk tables, badges
-│   ├── followups/     worklists
-│   └── reports/       export UIs
-├── pages/             one component per route
-├── routes/            AppRoutes.tsx + paths.ts
-├── services/          apiClient.ts (Axios) + one service per resource
-├── hooks/             custom hooks (useBackendHealth, ...)
-├── context/           AuthContext
-├── types/             shared TS types (mirror backend DTOs)
-├── utils/             formatters, constants
-├── App.tsx
-└── main.tsx
-```
-
-## Routes
-| Path | Page |
+| Path | Purpose |
 |---|---|
-| `/login` | Login |
-| `/dashboard` | Dashboard |
-| `/patients` | Patients |
-| `/upload` | Upload |
-| `/data-quality` | Data Quality |
-| `/predictions` | Predictions |
-| `/followups` | Follow-ups |
-| `/reports` | Reports |
+| `src/api/*Service.js` | One module per backend resource (see `../docs/API_INTEGRATION.md`) |
+| `src/api/axiosClient.js` | Base URL, Bearer token, 401/403 handling, backend error messages |
+| `src/context/AuthContext.jsx` | Login / register / session restore (`GET /auth/me`), notifications |
+| `src/hooks/useDepartments.js` | Department list from the data (`GET /reference/departments`) |
+| `src/utils/format.js` | Display helpers (age bands, percentages, "not scored") |
+| `src/constants/enums.js` | Values that match the SQL Server CHECK constraints |
 
-## Connectivity
-- All HTTP calls go through `src/services/apiClient.ts` using `VITE_API_BASE_URL`.
-- The header shows a live dot for `GET /api/health` on the backend (green = online).
-- The frontend must **never** call the ML service or the database directly.
-
-## TODO (Member 1)
-- Real login + protected routes
-- Page implementations and Recharts dashboards
-- Error / loading states
+## Data rules
+* No mock data or fallback numbers: values the backend does not have are shown as "—" or "Not scored".
+* The dataset has no patient names, exact ages or dates: patients are shown as `Patient <MRN>`, ages as
+  10-year bands, and charts use length of stay / age band / diagnosis category instead of months.
+* Risk tiers come from the ML service; the UI never computes a tier from a score.
