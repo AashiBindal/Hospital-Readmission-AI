@@ -57,6 +57,15 @@ public class User {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    // ==========================================
+    // Fields for Forgot Password / OTP Feature
+    // ==========================================
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "reset_token_expiry")
+    private LocalDateTime resetTokenExpiry;
+
     @Column(nullable = false)
     @Builder.Default
     private boolean active = true;
@@ -96,10 +105,6 @@ public class User {
         }
         return "US";
     }
-
-    // NOTE: the old getUsername() and getRoles() were removed. Both called themselves
-    // (infinite recursion -> StackOverflowError), and getRoles() returned `Arrays`.
-    // The login name now comes from CustomUserDetails, which uses the email.
 
     public enum Role {
         ADMIN, DOCTOR, NURSE
