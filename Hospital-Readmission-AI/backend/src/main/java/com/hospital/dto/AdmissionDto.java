@@ -1,0 +1,35 @@
+package com.hospital.dto;
+
+/** One hospital stay (dbo.Admissions) with its latest stored prediction (or null). */
+public record AdmissionDto(
+        long admissionId,
+        String externalAdmissionId,
+        Long uploadId,
+        String ageGroup,
+        String gender,
+        String race,
+        String department,
+        String admissionType,
+        String admissionSource,
+        String dischargeDisposition,
+        Integer lengthOfStay,
+        String primaryDiagnosisCode,
+        String secondaryDiagnosisCode,
+        String tertiaryDiagnosisCode,
+        String diagnosisCategory,
+        Integer numDiagnoses,
+        Integer numProcedures,
+        Integer numMedications,
+        Integer numLabTests,
+        Integer priorAdmissions,
+        Integer emergencyVisits,
+        Integer outpatientVisits,
+        String a1cResult,
+        String maxGluSerum,
+        String payerCode,
+        String weightRange,
+        String readmissionStatus,
+        boolean expiredAtDischarge,
+        boolean dischargedToHospice,
+        PredictionSummary latestPrediction) {
+}
