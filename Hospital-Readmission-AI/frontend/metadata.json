@@ -1,0 +1,8 @@
+{
+  "name": "MedRisk Predict",
+  "description": "A teal-themed healthcare portal for hospital readmission analytics, patient tracking, and secure role-based risk assessment dashboards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
